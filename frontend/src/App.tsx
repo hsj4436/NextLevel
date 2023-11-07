@@ -28,6 +28,7 @@ import Contents from "./pages/contents";
 import "./App.css";
 import LearningLifeChat from "./pages/learning/life/lifechat";
 import ChatTest from "./pages/learning/chattest";
+import LearnTest from "./pages/learning/learntest";
 
 function App() {
   // TopNav를 숨길 페이지 path
@@ -98,6 +99,7 @@ function App() {
             element={<LearningResultDetail />}
           />
           <Route path="/learning/chattest" element={<ChatTest />} />
+          <Route path="/learning/scenariotest" element={<LearnTest />} />
           {/* 랭킹페이지 */}
           <Route path="/ranking" element={<Ranking />} />
           {/* 마이페이지 */}

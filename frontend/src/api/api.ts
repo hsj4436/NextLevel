@@ -7,6 +7,7 @@ export const serverAxios = axios.create({
   baseURL: `${SERVER_ADDRESS}`,
   headers: {
     "Content-Type": "application/json",
+    "X-Authorization-Id": 6,
   },
 });
 
