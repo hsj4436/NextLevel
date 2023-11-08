@@ -41,7 +41,7 @@ const LearnTest = () => {
         setStream(stream);
         setMedia(mediaRecorder);
         makeSound(stream);
-        analyser.onaudioprocess = function (e) {
+        analyser.onaudioprocess = function () {
           setOnRec(false);
         };
       })
@@ -67,6 +67,7 @@ const LearnTest = () => {
     source.disconnect();
   };
 
+  // 전송
   const onSubmitAudioFile = useCallback(() => {
     if (audioUrl) {
       const audio = new Audio(URL.createObjectURL(audioUrl));
@@ -81,9 +82,9 @@ const LearnTest = () => {
       const audioContext = new AudioContext();
       const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
       const wav = audioBufferToWav(audioBuffer);
-      const wavFile = new File([wav], "sound", { type: "audio/wav" });
 
-      const script = "안녕하세요";
+      const wavFile = new File([wav], "sound", { type: "audio/wav" });
+      const script = "제 동생은 남동생이구요. 저보다 나이 2살정도 어려요.";
 
       const formdata = new FormData();
       formdata.append("wavFile", wavFile);
@@ -91,12 +92,16 @@ const LearnTest = () => {
 
       getScenarioProbelem(formdata);
     } else {
-      console.log("no audio");
+      console.log("asdf");
     }
   }, [audioUrl]);
 
   return (
     <div>
+      <div>
+        제 동생은 남동생이구요. 저보다 나이 2살 정도 어려요. 지금 하는 일은 의학
+        회사에서 영업팁에서 일 열심히 하고 있습니다.
+      </div>
       <button onClick={onRec ? onRecAudio : offRecAudio}>
         {onRec ? "녹음 시작" : "녹음 중지"}
       </button>
