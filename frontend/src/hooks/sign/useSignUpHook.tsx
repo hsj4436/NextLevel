@@ -89,9 +89,12 @@ export const useAddInformationHook = () => {
       } else {
         navigate("/login");
       }
-    } catch (error) {
-      navigate("/login");
-      console.log("회원가입 에러", error);
+    } catch (error: any) {
+      if (error.response.status === 409) {
+        setErrors({ ...errors, nickName: "이미 사용중인 닉네임입니다." });
+      } else {
+        navigate("/login");
+      }
     }
   };
 

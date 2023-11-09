@@ -24,8 +24,6 @@ const MypageEdit = () => {
     submitJoin,
     errors,
     handleImageChange,
-    isOpenModal,
-    closeModal,
   } = useUserInfoEditHook();
 
   return (
@@ -73,14 +71,6 @@ const MypageEdit = () => {
           수정하기
         </StyledMypageEditSubmitButton>
       </form>
-      {isOpenModal && (
-        <Modal
-          isDetailOpen={isOpenModal}
-          closeModal={closeModal}
-          modalTitle="닉네임 중복"
-          modalText="다른 닉네임을 입력해주세요."
-        />
-      )}
     </StyledMypageEdit>
   );
 };

@@ -23,11 +23,9 @@ const Modal = (props: any) => {
           <StyledModalContent>{props.modalText}</StyledModalContent>
         </StyledModalbody>
         <StyledModalButtonContainer>
-          {props.openPage && (
-            <StyledModalButton onClick={props.openPage} id="open">
-              {props.completeMent ? props.completeMent : "열기"}
-            </StyledModalButton>
-          )}
+          <StyledModalButton onClick={props.openPage} id="open">
+            {props.completeMent ? props.completeMent : "열기"}
+          </StyledModalButton>
           <StyledModalButton onClick={props.closeModal} id="close">
             닫기
           </StyledModalButton>

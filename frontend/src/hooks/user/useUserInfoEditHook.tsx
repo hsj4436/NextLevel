@@ -32,11 +32,6 @@ const validate = (values: FormData): Errors => {
 
 export const useUserInfoEditHook = () => {
   const navigate = useNavigate();
-  const [isOpenModal, setIsOpenModal] = useState(false);
-
-  const closeModal = () => {
-    setIsOpenModal(!isOpenModal);
-  };
   const [formData, setFormData] = useState<FormData>({
     nickName: useUserState((state: any) => state.user.nickName),
     profileImage: useUserState(
@@ -92,17 +87,15 @@ export const useUserInfoEditHook = () => {
     try {
       // 회원정보 수정 요청 api
       const res = await UserInfoEditPost(formData);
-      console.log(res);
       if (res.data.status === 200) {
         navigate("/mypage");
-      } else if (res.data.status === 409) {
-        setIsOpenModal(!isOpenModal);
+      }
+    } catch (error: any) {
+      if (error.response.status === 409) {
+        setErrors({ ...errors, nickName: "이미 사용중인 닉네임입니다." });
       } else {
         navigate("/login");
       }
-    } catch (error) {
-      navigate("/login");
-      console.log("회원정보수정 에러", error);
     }
   };
 
@@ -121,7 +114,5 @@ export const useUserInfoEditHook = () => {
     submitJoin,
     errors,
     handleImageChange,
-    closeModal,
-    isOpenModal,
   };
 };
