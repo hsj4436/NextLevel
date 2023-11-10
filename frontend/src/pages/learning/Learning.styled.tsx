@@ -35,7 +35,9 @@ const StyledLearnNavButton = styled.div.attrs<any>(() => ({}))`
 `;
 
 const StyledLearnBody = styled.div`
-  height: 62vh;
+  height: 86.5vh;
+  /* border: 1px solid blue; */
+  overflow: scroll;
 `;
 
 export {
