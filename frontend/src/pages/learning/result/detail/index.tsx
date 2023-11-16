@@ -40,6 +40,8 @@ const LearningDetailResult = () => {
     getAiResultDetail(situationProblemId);
   }, []);
 
+  console.log(aiResults);
+
   return (
     <StyledDetailResultChat>
       <StyledDetailResultChatTop>

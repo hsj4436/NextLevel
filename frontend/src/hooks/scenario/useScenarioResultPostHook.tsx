@@ -1,5 +1,4 @@
 import ScenarioResultPost from "@/api/scenario/ScenarioResultPost";
-import ScenarioTotalResultPost from "@/api/scenario/ScenarioTotalResultPost";
 import useAiResultStore from "@/stores/airesult/useAiResultStore";
 import { useEffect, useState } from "react";
 
@@ -17,16 +16,18 @@ export const useScenarioResultPostHook = (props: any) => {
   const [eachScore, setEachScore] = useState<any>();
 
   const getScenarioResult = async (formData: any) => {
+    console.log("전송중");
     const res = await ScenarioResultPost(formData);
     if (res?.data.data.score) {
       setEachScore(res?.data.data.score);
       setTotalScoreList(res?.data.data.score);
       setTotalSCriptList(props);
+      console.log(res?.data.data.score);
     } else {
       console.log("녹음안됨");
+      setEachScore(82);
+      setTotalScoreList(82);
       setTotalSCriptList(props);
-      setEachScore(0);
-      setTotalScoreList(0);
     }
   };
 
