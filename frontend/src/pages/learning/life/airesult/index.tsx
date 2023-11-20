@@ -9,7 +9,7 @@ import {
 import useAiResultStore from "@/stores/airesult/useAiResultStore";
 
 const LearnAiResult = (props: any) => {
-  const { getScenarioResult, eachScore } = useScenarioResultPostHook(
+  const { getScenarioResult, eachScore, isLoading } = useScenarioResultPostHook(
     props.scriptNumber
   );
 
@@ -20,10 +20,13 @@ const LearnAiResult = (props: any) => {
   const [analyser, setAnalyser] = useState<any>();
   const [audioUrl, setAudioUrl] = useState<any>();
   const chunks = []; // 오디오 청크 데이터를 저장할 배열
-  const [sound, setSound] = useState<any>();
+  const [audioPlayer, setAudioPlayer] = useState<any>(null);
 
   // 녹음
   const onRecAudio = () => {
+    setAudioUrl(null);
+    setAudioPlayer(null);
+    chunks.length = 0;
     const audioCtx = new AudioContext();
     const analyser = audioCtx.createScriptProcessor(0, 1, 1);
     setAnalyser(analyser);
@@ -71,9 +74,12 @@ const LearnAiResult = (props: any) => {
     });
 
     media.stop();
+    setMedia(null);
+    setStream(null);
 
     analyser.disconnect();
     source.disconnect();
+    setAudioPlayer(null);
   };
 
   // 녹음확인
@@ -82,22 +88,32 @@ const LearnAiResult = (props: any) => {
   const onSubmitAudioFile = useCallback(() => {
     if (audioUrl) {
       setPlayURL(!playURL);
-      const audio = new Audio(URL.createObjectURL(audioUrl));
-
-      audio.play();
+      if (audioPlayer) {
+        if (audioPlayer.paused) {
+          audioPlayer.play();
+        } else {
+          audioPlayer.pause();
+        }
+      } else {
+        const audio = new Audio(URL.createObjectURL(audioUrl));
+        setAudioPlayer(audio);
+        audio.play();
+        audio.onended = () => {
+          setPlayURL(false);
+          setAudioPlayer(null);
+        };
+      }
     }
-  }, [audioUrl, playURL]);
+  }, [audioUrl, playURL, audioPlayer]);
 
   //녹음 전송
   const [disableSend, setDisableSend] = useState<boolean>();
-  const [isClicked, setIsClicked] = useState<boolean>(false);
   const setTotalSCriptList = useAiResultStore(
     (state: any) => state.setTotalSCriptList
   );
   const sendToserverFun = useCallback(async () => {
     if (audioUrl) {
-      setIsClicked(!isClicked);
-      setSound(URL.createObjectURL(audioUrl));
+      setDisableSend(true);
       const arrayBuffer = await audioUrl.arrayBuffer();
       const audioContext = new AudioContext();
       const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
@@ -110,7 +126,7 @@ const LearnAiResult = (props: any) => {
       formdata.append("script", props.script);
 
       getScenarioResult(formdata);
-      setDisableSend(true);
+      setDisableSend(false);
     } else {
       console.log("녹음한 적이 없음");
     }
@@ -128,7 +144,10 @@ const LearnAiResult = (props: any) => {
       {audioUrl ? (
         <AiResultButtonContainer>
           {playURL ? (
-            <AiResultButton src="/scenario/pause.svg" />
+            <AiResultButton
+              src="/scenario/pause.svg"
+              onClick={onSubmitAudioFile}
+            />
           ) : (
             <AiResultButton
               src="/scenario/play.svg"
@@ -148,12 +167,26 @@ const LearnAiResult = (props: any) => {
           onClick={sendToserverFun}
           disabled={disableSend}
         >
-          <AiResultButton src="/scenario/send.svg" />
+          {isLoading ? (
+            <img
+              style={{ width: "25px", height: "25px" }}
+              src="/learning/loading.gif"
+              alt="로딩중"
+            />
+          ) : (
+            <AiResultButton src="/scenario/send.svg" />
+          )}
         </AiResultButtonContainer>
       ) : (
         <AiResultButtonContainer>
           <AiResultButton src="/scenario/graysend.svg" />
         </AiResultButtonContainer>
+      )}
+
+      {eachScore && (
+        <div style={{ fontSize: "20px", margin: "2px 0px 0px 6px" }}>
+          {eachScore}점
+        </div>
       )}
     </AiResult>
   );

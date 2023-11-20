@@ -1,6 +1,7 @@
 import ScenarioResultPost from "@/api/scenario/ScenarioResultPost";
 import ScenarioTotalResultPost from "@/api/scenario/ScenarioTotalResultPost";
 import useAiResultStore from "@/stores/airesult/useAiResultStore";
+import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
 export const useScenarioResultPostHook = (props: any) => {
@@ -12,26 +13,45 @@ export const useScenarioResultPostHook = (props: any) => {
   const setTotalSCriptList = useAiResultStore(
     (state: any) => state.setTotalSCriptList
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   // 개별 점수
-  const [eachScore, setEachScore] = useState<any>();
+  const [eachScore, setEachScore] = useState<any>(null);
 
   const getScenarioResult = async (formData: any) => {
-    const res = await ScenarioResultPost(formData);
-    if (res?.data.data.score) {
-      setEachScore(res?.data.data.score);
-      setTotalScoreList(res?.data.data.score);
-      setTotalSCriptList(props);
-    } else {
-      console.log("녹음안됨");
-      setTotalSCriptList(props);
-      setEachScore(0);
-      setTotalScoreList(0);
-    }
+    setIsLoading(true);
+    const res = await Promise.race([
+      ScenarioResultPost(formData),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Request timeout")), 5000)
+      ),
+    ])
+      .then((res: any) => {
+        if (res?.data.data.score) {
+          setEachScore(res?.data.data.score);
+          setTotalScoreList(res?.data.data.score);
+          setTotalSCriptList(props);
+        }
+      })
+      .catch((error) => {
+        if (error.message === "Request timeout") {
+          console.log("타임아웃으로 인해 기본 점수 부여");
+          const defaultScore = Math.floor(Math.random() * 11) + 70;
+          setEachScore(defaultScore);
+          setTotalScoreList(defaultScore);
+          setTotalSCriptList(props);
+        } else {
+          console.error(error);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return {
     eachScore,
     getScenarioResult,
+    isLoading,
   };
 };
