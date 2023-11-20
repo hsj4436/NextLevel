@@ -211,7 +211,7 @@ export const useSingGameInfoHook = () => {
   const playVideo = useCallback(async () => {
     if (!player) return;
     player.seekTo(song.songStartTime - 10, true);
-    player.setVolume(30);
+    player.setVolume(40);
     player.playVideo();
 
     const playEffectSound = () => {
@@ -220,7 +220,7 @@ export const useSingGameInfoHook = () => {
       audio1.play();
 
       audio1.onended = () => {
-        player.setVolume(50);
+        player.setVolume(60);
         player.seekTo(song.songStartTime, true);
         player.playVideo();
       };

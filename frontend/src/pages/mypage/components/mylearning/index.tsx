@@ -20,9 +20,9 @@ const Mylearning = (props: any) => {
   const swiperRef = useRef<any>(null);
   const handleChange = (e: any) => {
     if (e.activeIndex === 0) {
-      setMyPageState("shadowing");
-    } else if (e.activeIndex === 1) {
       setMyPageState("sing");
+    } else if (e.activeIndex === 1) {
+      setMyPageState("shadowing");
     } else if (e.activeIndex === 2) {
       setMyPageState("ai");
     }
@@ -32,9 +32,9 @@ const Mylearning = (props: any) => {
     setMyPageState(e.target.id);
   };
   useEffect(() => {
-    if (myPageState === "shadowing") {
+    if (myPageState === "sing") {
       swiperRef.current.swiper.slideTo(0);
-    } else if (myPageState === "sing") {
+    } else if (myPageState === "shadowing") {
       swiperRef.current.swiper.slideTo(1);
     } else if (myPageState === "ai") {
       swiperRef.current.swiper.slideTo(2);
@@ -44,18 +44,18 @@ const Mylearning = (props: any) => {
     <StyledMyLearningComponent>
       <StyledMyLearningTitle>
         <StyledMyLearningButton
-          id="shadowing"
+          id="sing"
           onClick={(e: any) => handleState(e, 0)}
           state={myPageState}
         >
-          {t("mypage.shadowing")}
+          {t("mypage.sing")}
         </StyledMyLearningButton>
         <StyledMyLearningButton
-          id="sing"
+          id="shadowing"
           onClick={(e: any) => handleState(e, 1)}
           state={myPageState}
         >
-          {t("mypage.sing")}
+          {t("mypage.shadowing")}
         </StyledMyLearningButton>
         <StyledMyLearningButton
           id="ai"
@@ -71,10 +71,10 @@ const Mylearning = (props: any) => {
         onSlideChange={handleChange}
       >
         <SwiperSlide>
-          <MyShadowing openModal={props.openModal} setMedia={props.setMedia} />
+          <MySing openModal={props.openModal} setMedia={props.setMedia} />
         </SwiperSlide>
         <SwiperSlide>
-          <MySing openModal={props.openModal} setMedia={props.setMedia} />
+          <MyShadowing openModal={props.openModal} setMedia={props.setMedia} />
         </SwiperSlide>
         <SwiperSlide>
           <MySituation openModal={props.openModal} setMedia={props.setMedia} />
