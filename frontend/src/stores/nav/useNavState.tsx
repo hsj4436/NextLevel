@@ -18,7 +18,7 @@ export const useNavState = create<NavState>((set) => ({
   setSelectBottomNav: (data) => set(() => ({ selectbottomnav: data })),
   selectlearn: "learning",
   setselectlearn: (data) => set(() => ({ selectlearn: data })),
-  myPageState: "shadowing",
+  myPageState: "sing",
   setMyPageState: (data) => set(() => ({ myPageState: data })),
 }));
 
