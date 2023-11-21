@@ -9,7 +9,7 @@
     },
     "sing": {
       "topFirst": "How far can you hear!",
-      "topSecond": "Try to match the lyrics while listening to K-POP",
+      "topSecond": "Sing along to K-POP",
       "category": {
         "popular": "Popular Music",
         "artist": "Popular Artist"
@@ -55,7 +55,7 @@
     },
     "enter": {
       "topFirst": "Let's laugh together",
-      "topSecond": "Funny stories in entertainment, let's laugh together now",
+      "topSecond": "Laugh with fun entertainment stories",
       "category": {
         "today": "Today's entertainment",
         "artist": " Collection of active scenes!"
